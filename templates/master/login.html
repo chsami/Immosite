@@ -1,0 +1,45 @@
+
+{% load staticfiles %}
+{% load i18n %}
+
+{%block page_style %}
+{%endblock %}
+
+{%block title%}
+    {% trans 'Login' %}
+{% endblock %}
+
+{% block content %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="panel panel-default w3-animate-opacity">
+                    <div class="panel-body">
+                        {% if error %}
+                             <p>{{error}}</p>
+                        {% endif %}
+                        {% if success %}
+                             <p>{{success}}</p>
+                        {% endif %}
+                        <div id="login-message" class="alert alert-danger" style="display:none">
+                          <strong>Danger!</strong> Indicates a dangerous or potentially negative action.
+                        </div>
+                        <form id="loginForm" class="w3-container" action="" method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            {% include 'master/forms/login-template.html' %}
+                            <a style="padding: 15px;float: right;" href="{% url 'password_reset' %}">{% trans "Wachtwoord vergeten?" %}</a>
+                            <button type="submit" class="w3-btn login-btn" style="width: 100%; background-color:#0d3532;">
+                                {% trans 'Login' %}
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}
+
+{%block page_scripts %}
+
+{%endblock %}

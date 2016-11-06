@@ -1,0 +1,52 @@
+<html>
+{% load staticfiles %}
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css">
+    <link href="{% static 'master/css/content/carousel.css' %}" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous">
+	</script>
+    <script src="{% static 'master/js/carousel.js' %}"></script>
+</head>
+
+
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-13">
+      <div class="carousel slide multi-item-carousel" id="theCarousel">
+        <div class="carousel-inner">
+          <div class="item active">
+            {% for pand in alle_panden%}
+                <div class="col-xs-4"><a href="/pand/{{pand.pk}}"><img src="{{ MEDIA_URL }}{{pand.profiel_foto}}" class="img-responsive"></a></div>
+            {% endfor %}
+          </div>
+          <div class="item notactive">
+
+          </div>
+          <div class="item notactive">
+
+          </div>
+          <div class="item notactive">
+
+          </div>
+          <div class="item notactive">
+
+          </div>
+          <div class="item notactive">
+
+          </div>
+        </div>
+        <a class="left carousel-control" href="#theCarousel" data-slide="prev"><i class="glyphicon glyphicon-chevron-left"></i></a>
+        <a class="right carousel-control" href="#theCarousel" data-slide="next"><i class="glyphicon glyphicon-chevron-right"></i></a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+</html>

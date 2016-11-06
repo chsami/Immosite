@@ -1,0 +1,38 @@
+<h1> Detail testing:  Detail Huis </h1>
+
+
+<h2><p>    {{pand.straat_naam}} {{pand.postcode}} {{pand.stad}}</p></h2>
+<h4><p>{{pand.beschrijving|linebreaksbr}}</p></h4>
+
+
+
+{% if  pand.pandreview_set.all %}
+
+    <p>Met volgende reviews:</p>
+        {% for pandReview in pand.pandreview_set.all %}
+            <ul>
+                    <li>  Pand {{ pandReview.pand.id }} |  Review auteur: {{pandReview.review.review_naam}} | Review: {{pandReview.review.review_text}}      </li>
+
+            </ul>
+
+        {% endfor %}
+{% else %}
+<p> pand heeft geen review<br/> voeg wat reviews toe </p>
+{% endif %}
+
+<!-- _______________________________________-->
+
+{% if pand.pandcriteria_set.all %}
+    <p> Met de volgende criteria</p>
+     {% for pandCriteria in pand.pandcriteria_set.all %}
+
+        <ul>
+                <li>{{pandCriteria.aantal}} {{pandCriteria.criteria.naam}} </li>
+
+        </ul>
+
+    {% endfor %}
+{% else %}
+    <p> pand heeft geen criteria's. voeg wat criteria's toe </p>
+
+{% endif %}

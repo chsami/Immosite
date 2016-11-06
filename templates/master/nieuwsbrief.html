@@ -1,0 +1,19 @@
+{% extends "master/base.html" %}
+{% load staticfiles %}
+{% block title %}Nieuwsbrief - ViaSofie{% endblock %}
+{% block content %}
+<form class="NieuwsbriefForm" action="" method="post">
+    <div class="Nieuwsbrief">
+        {% csrf_token %}
+        <div class="form-white-background">
+            <div class="form-title-row">
+                <h1>Nieuwsbrief</h1>
+            </div>
+            {% include 'master/forms/form-Template.html' %}
+            <div class="form-row">
+                <button type="submit">Inschrijven</button>
+            </div>
+        </div>
+    </div>
+</form>
+{% endblock %}

@@ -1,0 +1,611 @@
+{% load staticfiles %}
+{% load i18n %}
+{% load inplace_edit %}
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <!-- CDN Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+          integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/css/bootstrap-select.min.css">
+    <!-- FONTS -->
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
+    <link href="http://fonts.googleapis.com/css?family=Cookie" rel="stylesheet" type="text/css">
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js"
+            integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="{% static 'master/js/bootstrap-select.js' %}"></script>
+    <script src="{% static 'master/js/bootstrap-notify.js' %}"></script>
+    <!-- EXTERN CSS -->
+    <link href="{% static 'master/css/footer/footer-with-address-and-phones.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+    <link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css">
+    <link rel="shortcut icon" type="image/png" href="{{STATIC_URL}}master/img/favicon.ico"/>
+    <!-- EIGEN STYLESHEETS -->
+    <link href="{% static 'master/css/base/base.css' %}" rel="stylesheet">
+    <link href="{% static 'master/css/content/login.css' %}" rel="stylesheet">
+    <link href="{% static 'master/css/base/options_style.css' %}" rel="stylesheet">
+    <link href="{% static 'master/css/base/newsletter.css' %}" rel="stylesheet">
+    <meta name="keywords"
+         content="immo huur koop huren kopen huis appartement via sofie onroerend goed">
+
+    <meta name="description"
+             content="An accurate, keyword-rich description
+             about 150 characters">
+    {%block page_style %}{%endblock %}
+
+    <title>{% block title %}Home - Viasofie{% endblock %}</title>
+
+    <!-- You can use Open Graph tags to customize link previews.
+  Learn more: https://developers.facebook.com/docs/sharing/webmasters -->
+    <meta property="og:url" content="193.191.187.253:8092"/>
+    <meta property="og:type" content="Viasofie"/>
+    <meta property="og:title" content="Viasofie"/>
+    <meta property="og:description" content="Immo Viasofie"/>
+    <meta property="og:image" content="http://193.191.187.253:8092/static/master/img/base/logo.png"/>
+</head>
+
+<body>
+{% if user.is_superuser %}
+<div id="support-ticket-div" class="support-ticket">Vragen of problemen? Contacteer ons!</div>
+<form id="support-ticket-form">
+    <center><p></p></center>
+    <label id="close-support-ticket-form">X</label>
+    <label>Onderwerp:</label>
+    <center><input name="onderwerp" type="text" class="w3-input"/><br/></center>
+    <label>Bericht:</label>
+    <center><textarea name="bericht" class="w3-input"></textarea></center>
+    <br/>
+    <button id="support-ticket-submit" style="background-color:#0d3532" class="w3-btn-block w3-btn w3-wide w3-border w3-round-large"
+            type="submit">Verstuur
+    </button>
+    {% csrf_token %}
+</form>
+{% endif %}
+<div class="container-fluid">
+    <div class="row">
+        <nav class="navbar navbar-default ">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#">
+
+                    </a>
+
+                </div>
+
+                <div class="collapse navbar-collapse w3-animate-opacity" id="myNavbar">
+                    <ul class="nav navbar-nav">
+                        <li><a href="{% url 'index' %}"><img id="nav-comp-img" alt="Viasofie"
+                                                             src="{% static 'master/img/base/logo.png' %}"
+                                                             height="60" width="60"/></a></li>
+                        <li class="line hvr-underline-reveal">
+                            <a href="{% url 'te_koop' %}">
+                                <span class="glyphicon glyphicon-home"></span>
+                                {% trans "Te Koop" %}
+                            </a>
+                        </li>
+                        <li class="line hvr-underline-reveal">
+                            <a href="{% url 'te_huur' %}">
+                                <span class="glyphicon glyphicon-home"></span>
+                                {% trans "Te Huur" %}
+                            </a>
+                        </li>
+                        <li class="line hvr-underline-reveal">
+                            <a href="{% url 'advice' %}">
+                                <span class="glyphicon glyphicon-question-sign"></span>
+                                {% trans "Advies" %}
+                            </a>
+                        </li>
+                        <li class="line hvr-underline-reveal">
+                            <a href="{% url 'about' %}">
+                                <span class="glyphicon glyphicon-info-sign"></span>
+                                {% trans "Over ons" %}
+                            </a>
+                        </li>
+                        <li class="line hvr-underline-reveal">
+                            <a href="{% url 'contact' %}">
+                                <span class="glyphicon glyphicon-envelope"></span>
+                                {% trans "Contact" %}
+                            </a>
+                        </li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+
+                        {% if user.is_authenticated %}
+                        <!-- Single button -->
+                        <div class="btn-group account-dropdown">
+                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+                                    aria-haspopup="true" aria-expanded="false">
+                                <span class="glyphicon glyphicon-user"></span>Account <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                {% if user.is_superuser %}
+                                <li class=""><a href="{% url 'admin:index' %}"><span class="glyphicon glyphicon-blackboard">
+													</span>{% trans "Admin paneel" %}</a>
+                                </li>
+                                <li class=""><a href="{% url 'verkoper' %}"><span class="glyphicon glyphicon-user">
+													</span>{% trans "Registreer verkoper" %}</a>
+                                </li>
+                                <li class=""><a href="{% url 'send-nieuwsbrief' %}"><span
+                                        class="glyphicon glyphicon-envelope">
+													</span>{% trans "Nieuwsbrief versturen" %}</a>
+                                </li>
+                                {% endif %}
+                                <li class="">
+                                    <a id="visit-my-property" href="{% url 'mijn_panden' %}">
+                                        <span class="glyphicon glyphicon-home"></span>
+                                        {% trans "Mijn panden" %}
+                                    </a>
+                                </li>
+                                <li class="">
+                                    <a id="change-password-link" href="{% url 'profile' %}">
+                                        <span class="glyphicon glyphicon-lock"></span>
+                                        {% trans "Wachtwoord beheren" %}
+                                    </a>
+                                </li>
+                                <li class="">
+                                    <a id="logout_link" href="{% url 'logout' %}">
+                                        <span class="glyphicon glyphicon-log-out"></span>
+                                        {% trans "Uitloggen" %}
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        {% else %}
+                        <li class="hvr-underline-reveal">
+                            <a id="login_link" href="#">
+                                <span class="glyphicon glyphicon-log-in"></span>
+                                {% trans "Inloggen" %}
+                            </a>
+                        </li>
+                        {% endif %}
+                        <div class="btn-group btn-group-languages">
+                            <button type="button" class="btn btn-default dropdown-toggle btn-dropdown-languages"
+                                    data-toggle="dropdown">
+                                <span class="lang-sm lang-lbl-full" lang="nl"></span> <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-languages" role="menu">
+                                <li><a class="lang-sm lang-lbl-full" lang="nl"></a></li>
+                                <li><a class="lang-sm lang-lbl-full" lang="en"></a></li>
+                                <li><a class="lang-sm lang-lbl-full" lang="fr"></a></li>
+                            </ul>
+                        </div>
+                    </ul>
+                </div>
+
+            </div>
+        </nav>
+    </div>
+    {% block banner_content %}
+    {% endblock %}
+
+    {% block content %}
+
+    {% endblock %}
+
+    <!-- MINI OPTIES MENU ITEM -->
+    <div class="row">
+        <div id="cd-nav">
+            <a class="cd-nav-trigger">Menu<span></span></a>
+            <nav id="cd-main-nav">
+                <ul>
+                    <li><a class="mini-option-menu-amara_adv" data-toggle="modal" href="#advanceSearch">Geavanceerd zoeken</a></li>
+                    <li class="nieuws mini-option-menu-amara_nieuws"><a data-toggle="modal" href="#newsletter">Nieuwsbrief</a></li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <!--ADVANCED SEARCH -->
+    <div id="advanceSearch" class=" modal fade" role="dialog">
+        <div class="modal-dialog myModal">
+
+            <!-- Modal content-->
+            <div class="modal-content advance-search ">
+                <div class="modal-header search-heading">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h3 class="search-heading">
+                        <i class="fa fa-search"></i>
+                        {% trans "Geavanceerd zoeken" %}
+                    </h3>
+                </div>
+
+                <div class="modal-body property-search-form">  <!-- as = advance search -->
+                    <form class="clearfix advanced-form" action="{% url 'te_koop' %}" method="post">
+                        {% csrf_token %}
+                        <div class="row">
+                            <!-- Algemeen -->
+                            <div class="col-xs-12 col-sm-12 col-md-11 form-group">
+                                <h3>{% trans "Algemeen" %}</h3>
+                            </div>
+                            <!-- Locatie -->
+                            <div class="col-xs-12 col-sm-4 col-md-3 form-group">
+                                <input type="text" name="location" id="cities_adv" value=""
+                                       placeholder="{% trans 'Locatie, Postcode' %}" class="form-control search-field">
+                            </div>
+                            <!-- Type -->
+                            <div class="col-xs-12 col-sm-4 col-md-3 form-group">
+                                <select class="selectpicker select-status"
+                                        multiple multiple title="Type" data-live-search="true" data-width="100%"
+                                        name="housetype">
+                                    {% for t in typehuis %}
+                                    <option>{{t}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <!-- Status -->
+                            <div class="col-xs-12 col-sm-4 col-md-3 form-group">
+                                <select class="selectpicker show-tick select-status " title="Status" name="statuspicker"
+                                        data-width="100%">
+                                    {% for s in status %}
+                                    <option>{{s}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <!-- Staat -->
+                            <div class="col-xs-12 col-sm-4 col-md-3 form-group">
+                                <select class="selectpicker select-status"
+                                        multiple multiple title="{% trans 'Staat' %}" data-live-search="true"
+                                        data-width="100%" name="property">
+                                    {% for s in staat %}
+                                    <option>{{s}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <!-- criteria inputvelden -->
+                            <div class="col-xs-12 col-sm-4 col-md-3 form-group">
+                                <input type="number" name="amt-slaapkamers" id="min-bedrooms" value=""
+                                       placeholder="{% trans 'Min. slaapkamers' %}" min="0" max="15"
+                                       class="form-control">
+                            </div>
+                            <div class="col-xs-12 col-sm-4 col-md-3 form-group">
+                                <input type="number" name="amt-badkamers" id="min-bathrooms" value=""
+                                       placeholder="{% trans 'Min. badkamers' %}" min="0" max="15" class="form-control">
+                            </div>
+                            <!-- Referentie nummer -->
+                            <div class="col-xs-12 col-sm-4 col-md-3 form-group">
+                                <input type="text" name="ref-number" id="ref-number" value=""
+                                       placeholder="{% trans 'Referentie nummer' %}"
+                                       min="0" class="form-control">
+                            </div>
+                            <!-- Bouwjaar-->
+                            <div class="col-xs-12 col-sm-4 col-md-3 form-group">
+                                <input type="number" name="min-build" id="min-build" value=""
+                                       placeholder="{% trans 'Min bouwjaar' %}" max="2016"
+                                       step="1" class="form-control">
+                            </div>
+                            <!-- Prijs-->
+                            <div class="col-xs-12 col-sm-4 form-group price-range">
+                                {% trans "Prijs" %}:en
+                                <label>
+                                    &euro; <span class="price-range-min auto" id="price-range-min"> </span> -
+                                    &euro; <span class="price-range-max" id="price-range-max"> </span>
+                                </label>
+                                <div id="slider-price"></div>
+                            </div>
+                            <!-- Oppervlakte-->
+                            <div class="col-xs-12 col-sm-4 form-group price-range">
+                                {% trans "Grond oppervlakte:" %}
+                                <label>
+
+                                    <span id="size-range-min"> </span>m<sup>2</sup> -
+                                    <span id="size-range-max"> </span>m<sup>2</sup>
+                                </label>
+                                <div id="slider-size"></div>
+                            </div>
+                            <!-- Verzenden -->
+                            <div class="col-xs-12 col-sm-12 col-md-11 form-group send-form">
+                                <input type="submit" value="{% trans 'Zoeken' %}"
+                                       class="btn btn-primary btn-block form-control">
+                            </div>
+                            <!-- meer/ minder criteria's -->
+                        </div>
+                        <a data-toggle="collapse" href="#collapse1">
+                            <span class="more">{% trans "Weergeef meer Criteria's" %}</span>
+                        </a>
+                        <div id="collapse1" class="panel-group panel-collapse collapse">
+                            <div class="panel panel-default property-search-more">
+                                <div class="panel-heading">
+                                    <h6 class="panel-title">
+                                        {% trans "PANDEN CRITERIA'S:" %}
+
+                                    </h6>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="row">
+                                        {% for c in criteria %}
+                                        <div class="col-xs-12 col-sm-4 col-md-3 form-group">
+                                            <input name="{{c.naam}}" id="property-search-feature-{{c.pk}}"
+                                                   class="property-search-feature" type="checkbox" value="">
+                                            <label for="property-search-feature-{{c.pk}}">{{c}}</label>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <input hidden name="search-type" value="advanced"/>
+                        <input hidden id="price-min-id" value="0" name="price-min"/>
+                        <input hidden id="price-max-id" value="5000000" name="price-max"/>
+                        <input hidden id="size-min-id" value="" name="size-min"/>
+                        <input hidden id="size-max-id" value="" name="size-max"/>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+     <!-- NIEWSBRIEF -->
+    <div id="newsletter" class="modal fade" role="dialog">
+        <input id="post-url" type="hidden" value="{% url 'register-nieuwsbrief' %}"/>
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h3 class="modal-title">Nieuwsbrief</h3>
+                </div>
+                <div class="modal-body">
+
+                    <form id="newsletter-form" class="cd-form">
+                        {% csrf_token %}
+                        <input type="text" id="cd-email" class="cd-email" name="cd-email"
+                               placeholder="Voer uw email  adres hierin">
+                        <input type="submit" class="cd-submit" value="Submit">
+
+                        <div class="cd-loading"></div>
+                    </form>
+
+                    <div data-type="message" class="cd-response-error">
+                        <p>Vang hiermee errors op</p>
+                    </div>
+                    <div data-type="message" class="cd-response-success">
+                        <p>Email Succesvol toegevoegd aan onze nieuwsbrief</p>
+                    </div>
+                    <div data-type="message" class="cd-response cd-response-notification">
+                        Voeg opmerkingen toe here
+                    </div>
+
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!--BACK TO TOP -->
+    <div class="backtop-container">
+        <a href="#" class="scrollToTop "><i class="fa fa-chevron-up"></i></a>
+    </div>
+    <a href="{% url 'index' %}"><img alt="Viasofie" src="{% static 'master/img/base/logo.png' %}" height="80" width="80"
+                                     id="comp-img"/></a>
+    <!-- FOOTER -->
+    <div class="row">
+        <footer class="footer-distributed">
+
+            <div class="footer-left">
+                <p style="color:whitesmoke; font-weight:100">
+                {% if footer_tel != None %}
+                    <h3>{% inplace_edit "footer_biv.title" %}</h3>
+                    <p></p>
+                    <p>{% inplace_edit "footer_biv.content" %}</p>
+                {% else %}
+                    <h3>VIA SOFIE</h3>
+                    <p></p>
+                    <p>BIV CONTENT</p>
+                {% endif %}
+                <p></p>
+                <p></p>
+                <div>
+                    <img src="{% static 'master/img/footer/biv.gif' %}" width="10%"
+                         style="border: 4px solid blanchedalmond;"/>
+                </div>
+                <hr/>
+                <p class="lowest-footer-para" style="color:whitesmoke; font-weight:500">2016 © Viasofie - Verder gaan in
+                    vastgoed |
+                    <a href="{% url 'disclaimer' %}">Disclaimer</a> | <a
+                            href="{% url 'privacybeleid' %}">Privacybeleid</a> | <a
+                            href="{% url 'sitemap' %}">Sitemap</a></p>
+
+            </div>
+
+            <div class="footer-center">
+
+                <div>
+                    <i class="fa fa-map-marker"></i>
+                    {% if footer_tel != None %}
+                        <p><span>{% inplace_edit "footer_adres.content" %}</span> {% inplace_edit "footer_adres.title" %}
+                    {% else %}
+                        <p><span>DB FIELD IS EMPTY | PLACEHOLDER = ADRES CONTENT</span> DB FIELD IS EMPTY | PLACEHOLDER = ADRES TITEL
+                    {% endif %}
+                    </p>
+                </div>
+
+                <div>
+                    <i class="fa fa-phone"></i>
+                    {% if footer_tel != None %}
+                        <p>{% inplace_edit "footer_tel.title" %}</p>
+                    {% else %}
+                        <p>DB FIELD IS EMPTY | PHONE = </p>
+                    {% endif %}
+                </div>
+
+                <div>
+                    <i class="fa fa-envelope"></i>
+                    {% if footer_tel != None %}
+                        <p><a href="#">{% inplace_edit "footer_email.title" %}</a></p>
+                    {% else %}
+                        <p><a href="#">DB FIELD IS EMPTY | email title</a></p>
+                    {% endif %}
+
+
+                </div>
+            </div>
+
+            <div class="footer-right">
+                <div style="border-bottom: 2px solid white">
+                    <p class="footer-disclaimer">
+                        <span>Project by</span>
+                    <ul style="width: 120%;">
+                        <li style="color:whitesmoke;">Sami Chkhachkhi Aka Mocrosoft</li>
+                        <li style="color:whitesmoke;">Amara Kromah Aka 2 Black 2 Furious</li>
+                        <li style="color:whitesmoke;">Stijn Dirickx Aka Polish-Guy</li>
+                        <li style="color:whitesmoke;">Jasper Maes Aka The-White-Kid</li>
+                    </ul>
+                    </p>
+                </div>
+                <div class="footer-icons" style="margin-top: 17.5%;">
+                    <a target="_blank"
+                       href="http://www.facebook.com/share.php?u=[http://193.191.187.253:8092]&title=[Viasofie]"><i
+                            class="fa fa-facebook"></i></a>
+                    <a target="_blank" href="https://www.twitter.com"><i class="fa fa-twitter"></i></a>
+                    <a target="_blank" href="https://www.linkedin.com"><i class="fa fa-linkedin"></i></a>
+                    <a target="_blank" href="https://www.github.com"><i class="fa fa-github"></i></a>
+
+                </div>
+
+            </div>
+        </footer>
+    </div>
+</div>
+
+
+<!-- LOGIN MODAL - LOGIN.JS LOADS THIS -->
+<div id="mainModal" class="modal fade" role="dialog">
+    <input id="post-url-login" type="hidden" value="{% url 'login' %}"/>
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header" style="border-bottom: none !important;">
+                <img style="float:left; position:absolute; margin-bottom:5%;" alt="Viasofie"
+                     src="{% static 'master/img/base/logo.png' %}"
+                     height="60" width="60"/>
+                <button type="button" class="close" data-dismiss="modal">×</button>
+                <h4 style="text-align:center" class="modal-title">Modal Header</h4>
+            </div>
+            <div class="modal-body">
+                <div id="model-body-content">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--- Eigen JS -->
+<script src="{% static 'master/js/cookie/jquery.cookie.min.js' %}"></script>
+<script src="{% static 'master/js/base.js' %}"></script>
+<script src="{% static 'master/js/jquery.number.js' %}"></script>
+<script src="{% static 'master/js/base/side_options.js' %}"></script>
+<script src="{% static 'master/js/base/newsletter.js' %}"></script>
+<script src="{% static 'master/js/typeahead.js/typeahead.bundle.min.js' %}"></script>
+<script>
+    (function (i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r;
+        i[r] = i[r] || function () {
+                    (i[r].q = i[r].q || []).push(arguments)
+                }, i[r].l = 1 * new Date();
+        a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0];
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+    ga('create', 'UA-78246240-1', 'auto');
+    ga('send', 'pageview');
+</script>
+<script>
+    $(document).ready(function () {
+        var lastPos = 0;
+        var clicked = false;
+        var scrollSpeed = 400;
+        //COMPANY IMAGE WHEN SCROLLING LEFT ON SCREEN
+        $(document).scroll(function () {
+            var y = $(this).scrollTop();
+            if (clicked == false) {
+                lastPos = y;
+            }
+            if (y > 100) {
+                $('#comp-img').fadeIn();
+                $('#comp-img').addClass('w3-animate-zoom');
+                $('.scrollToTop').fadeIn();
+            } else {
+                $('#comp-img').fadeOut();
+                $('.scrollToTop').fadeOut();
+            }
+        });
+        //Check to see if the window is top if not then display button
+        $(window).scroll(function () {
+            if ($(this).scrollTop() > 100) {
+                $('.scrollToTop').fadeIn();
+            } else {
+                $('.scrollToTop').fadeOut();
+            }
+        });
+
+
+        //Click event to scroll to top
+        $('.scrollToTop').click(function () {
+            $('html, body').animate({scrollTop: 0}, scrollSpeed);
+            return false;
+        });
+        $('.mini-option-menu-amara_adv').click(function() {
+            clicked = true;
+            $('html, body').animate({scrollTop: 0}, scrollSpeed);
+        });
+        $('.mini-option-menu-amara_nieuws').click(function() {
+            clicked = true;
+            $('html, body').animate({scrollTop: 0}, scrollSpeed);
+        });
+
+        $('#advanceSearch').on('hidden.bs.modal', function () {
+            if (clicked) {
+                clicked = false;
+                $('html, body').animate({scrollTop: lastPos}, scrollSpeed);
+            }
+        })
+
+         $('#newsletter').on('hidden.bs.modal', function () {
+            if (clicked) {
+                clicked = false;
+                $('html, body').animate({scrollTop: lastPos}, scrollSpeed);
+            }
+        })
+
+        $("#collapse1").on("hide.bs.collapse", function () {
+            if ($(".more").text().indexOf("minder") > 0) {
+                $(".more").html("Weergeef <strong> meer </strong> Criteria's");
+            } else {
+                $(".more").html("Display <strong> more </strong> Criteria's");
+            }
+            //
+        });
+        $("#collapse1").on("show.bs.collapse", function () {
+            if ($(".more").text().indexOf("meer") > 0) {
+                $(".more").html("Weergeef <strong> minder </strong> Criteria's");
+            } else {
+                $(".more").html("Display <strong> less </strong> Criteria's");
+            }
+        });
+    });
+</script>
+{%block page_scripts %}
+
+
+{% endblock %}
+</body>
+
+</html>

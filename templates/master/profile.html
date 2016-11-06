@@ -1,0 +1,40 @@
+{%extends "master/base.html" %}
+{% load staticfiles %}
+
+<!--  HEADER SECTIE -->
+{%block page_style %}
+<link href="{% static 'master/css/content/profile.css' %}" rel="stylesheet">
+{%endblock %}
+
+{%block title%}
+    Profile
+{% endblock %}
+
+
+{% block content %}
+        <form id="change-password-form"class="form-horizontal" action="" method="post" enctype="multipart/form-data" style="width:50%; margin-left:25%; margin-top:2.5%;">
+            {% csrf_token %}
+            <p style="text-align:center;font-size:1.4em;"></p>
+            <label>
+                Huidig wachtwoord:
+            </label>
+            <input class="w3-input" type="password" name="old-password"/>
+            <label>
+                Nieuw wachtwoord:
+            </label>
+            <input class="w3-input" type="password" name="new-password"/>
+            <label>
+                Herhaal nieuw wachtwoord:
+            </label>
+            <input class="w3-input" type="password" name="new-password-confirmation"/>
+            <button class="w3-btn-block w3-btn w3-wide w3-border w3-round-large" type="submit" style="background-color:#0d3532;margin-top:2.5%;">Verstuur</button>
+            <input hidden name="username" value="{{user.username}}"/>
+        </form>
+{% endblock %}
+
+
+<!-- FOOTER -->
+{%block page_scripts %}
+    <script src="{% static 'master/js/profiel.js' %}"></script>
+{%endblock %}
+

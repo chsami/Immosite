@@ -1,0 +1,92 @@
+{% extends "master/base.html" %}
+{% load staticfiles %}
+{% load i18n %}
+
+{% block title %}{% trans "Mijn Panden" %} {% endblock %}
+
+<!--  HEADER SECTIE -->
+{%block page_style %}
+<style>
+    .container {
+        margin-top: 10%;
+    }
+    .panel-group {
+        display:block;
+        text-align: -webkit-center;
+    }
+    .panel-heading {
+        background-color: #0d3532 !important;
+        color: whitesmoke !important;
+    }
+    .content {
+        border-bottom: 2px solid grey;
+    }
+    img {
+        margin-bottom: 5% !important;
+    }
+    h4 > a {
+        font-size: 1.6em;
+    }
+</style>
+{%endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="panel-group">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h4 class="panel-title">
+          <a data-toggle="collapse" href="#collapse1">{% trans "Mijn panden" %}</a>
+        </h4>
+      </div>
+      <div id="collapse1" class="panel-collapse collapse">
+          {% for pand in panden %}
+            <div class="content col-xs-12">
+                <h1>Adres: <b>{{pand}}</b></h1>
+                <h2>Status : <b>{{pand.status}}</b></h2>
+                <h2>Fase : <b>{{pand.fase}}</b></h2>
+                <h3>Aantal bezoekers <b>{{pand.pand_hit_count.unieke_bezoekers}}</b>
+                    <span class="glyphicon glyphicon glyphicon-eye-open" aria-hidden="true"></span></h3>
+                <img style="border:2px solid white;"
+                 src="{{ MEDIA_URL }}{{pand.profiel_foto}}"
+                 alt="{{pand.referentienummer}}" width="300px" height="150px">
+            </div>
+            {% endfor %}
+          <
+        <div class="panel-footer">Via Sofie</div>
+      </div>
+    </div>
+  </div>
+    <div class="panel-group">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h4 class="panel-title">
+          <a data-toggle="collapse" href="#collapse2">{% trans "Bezichtigingen" %}</a>
+        </h4>
+      </div>
+      <div id="collapse2" class="panel-collapse collapse">
+          {% for b in bezichtiging %}
+            <div class="content col-xs-12">
+                <a href="{% url 'pand_detail' b.pand.referentienummer %}">
+                    <h1>{{b.pand}}</h1>
+                    <img style="border:2px solid white;"
+                     src="{{ MEDIA_URL }}{{b.pand.profiel_foto}}"
+                     alt="{{b.pand.referentienummer}}" width="300px" height="150px">
+                    </a>
+                <h2>Naam: <b>{{b.bezichtiging}}</b></h2>
+                <h2>Datum: <b>{{b.datum}}</b></h2>
+            </div>
+          {% endfor %}
+        <div class="panel-footer">Via Sofie</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+
+
+<!--- FOOTER  -->
+{%block page_scripts %}
+{%endblock %}

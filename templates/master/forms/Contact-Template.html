@@ -1,0 +1,9 @@
+
+<div class="form-group" style="display:block; text-align:-webkit-center; padding: 20px; margin: 15px 0 40px 0;">
+    {% for field in form %}
+    <span class="text-danger small">{{ field.errors }}</span>
+    <label class="" style="margin-right: 2.5%;">{{field.label_tag}}</label>
+    <div class="" style="margin-bottom:2.5%;">{{ field }}</div>
+    {% endfor %}
+    <button style="width: 100%; background-color:#0d3532;"class="w3-btn-block w3-round w3-xlarge" type="submit">send</button>
+</div>

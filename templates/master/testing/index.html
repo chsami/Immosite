@@ -1,0 +1,16 @@
+<h1> Testing Panden </h1>
+
+{% if alle_panden %}			<!-- Zolang ze minstens 1 pand hebben -->
+
+	<h1> Alle huizen </h1>
+        <ul>
+            {% for pand in alle_panden%}
+               <li> <p>{{pand.straat_naam}} {{pand.huis_nummer}} {{pand.postcode}} {{pand.stad}} staat {{pand.status}}
+                   <a href=" /test/{{pand.id}}/">Details</a> </p></li>
+            {% endfor %}
+        </ul>
+
+{%else %}					<!-- Als ze geen pand heeft -->
+	<h3>Geen panden in database. Gelieve een pand toe te voegen </h3>
+
+{% endif %}

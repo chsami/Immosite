@@ -1,0 +1,109 @@
+/* LOGIN FORM */
+
+body.login {
+    background: #f8f8f8;
+}
+
+.login #header {
+    height: auto;
+    padding: 5px 16px;
+    box-shadow: none;
+    border-bottom: 3px solid #032220;
+}
+
+.login #header #branding{
+    float: none;
+}
+
+.login #header h1 {
+    font-size: 28px;
+    text-transform: capitalize;
+    font-weight: 400;
+}
+
+.login #header h1 a {
+    color: #fff;
+}
+
+.login #content {
+    padding: 20px 20px 0;
+}
+
+.login #container {
+    background: #fff;
+    border: 1px solid #eaeaea;
+    overflow: hidden;
+    width: 28em;
+    min-width: 450px;
+    margin: 100px auto;
+    -webkit-box-shadow: -1px 30px 17px -5px rgba(0,0,0,0.33);
+    -moz-box-shadow: -1px 30px 17px -5px rgba(0,0,0,0.33);
+    box-shadow: -1px 30px 17px -5px rgba(0,0,0,0.33);
+border-radius: 15px 15px 15px 15px;
+-moz-border-radius: 15px 15px 15px 15px;
+-webkit-border-radius: 15px 15px 15px 15px;
+
+}
+
+.login #content-main {
+    width: 100%;
+}
+
+.login .form-row {
+    padding: 4px 0;
+    float: left;
+    width: 100%;
+    border-bottom: none;
+}
+
+.login .form-row label {
+    padding-right: 0.5em;
+    line-height: 2em;
+    font-size: 1.7em;
+    clear: both;
+    color: #666;
+}
+
+
+.login .form-row #id_username, .login .form-row #id_password {
+    clear: both;
+    padding: 8px;
+    width: 100%;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    height: 45px;
+    line-height: 40px;
+    font-size: 1.8em;
+    color: #777;
+    box-shadow: none;
+    background: transparent;
+    transition: all 0.2s;
+    border-radius: 5px  5px  5px  5px;
+    -moz-border-radius: 5px  5px  5px  5px;
+    -webkit-border-radius: 5px  5px  5px  5px;
+    outline:0px !important;
+    border: 1px solid #e6e6e6
+}
+
+.login .form-row #id_username:focus, .login .form-row #id_password:focus{
+    border-color: #2E5C59;
+}
+
+.login span.help {
+    font-size: 10px;
+    display: block;
+}
+
+.login .submit-row {
+    clear: both;
+    /*padding: 1em 0 0 9.4em;*/
+    margin: 0;
+    border: none;
+    background: none;
+    text-align: left;
+}
+
+.login .password-reset-link {
+    text-align: center;
+}

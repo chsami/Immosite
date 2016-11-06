@@ -1,0 +1,11 @@
+{% extends "master/base.html" %}
+{% load staticfiles %}
+{% block title %}Nieuwsbrief - ViaSofie{% endblock %}
+{% block content %}
+    {% if nieuwsbrief != '1' %}
+        <h1>Nieuwsbrief is geactiveerd!</h1>
+    {% else %}
+        <h1>Code is niet meer actief!</h1>
+    {% endif %}
+<div style="height:50%;"><p></p></div>
+{% endblock %}

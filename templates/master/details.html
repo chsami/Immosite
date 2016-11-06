@@ -1,0 +1,801 @@
+{%extends "master/base.html" %}
+{% load staticfiles %}
+{% load humanize %}
+{% load inplace_edit %}
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+
+<!--  HEADER -->
+{%block title%}
+    Detail
+{% endblock %}
+{%block page_style %}
+    <link  href="http://cdnjs.cloudflare.com/ajax/libs/fotorama/4.6.4/fotorama.css" rel="stylesheet">
+
+    <link href="{% static 'master/css/content/details.css' %}" rel="stylesheet">
+
+    <script src='https://www.google.com/recaptcha/api.js'></script>
+
+
+    <style>
+        .fb-share-button
+        {
+            display: inline;
+            /* width: 35px; */
+            /* height: 35px; */
+            cursor: pointer;
+            background-color: #e8e8e8;
+            border-radius: 2px;
+            font-size: 20px;
+            color: #0d3532;
+            text-align: center;
+            margin-left: 15px;
+            transform: scale(1.8);
+        }
+    </style>
+{%endblock %}
+
+
+
+
+
+{% block content %}
+<!-- Load Facebook SDK for JavaScript -->
+							<div id="fb-root"></div>
+							<script>
+								window.fbAsyncInit = function() {
+							FB.init({
+							  appId      : '517558071749748', // App ID
+							  status     : true,
+							  version:  'v2.0',
+							  cookie     : true,
+							  xfbml      : true  // parse XFBML
+							});
+						};
+								(function(d, s, id) {
+							  var js, fjs = d.getElementsByTagName(s)[0];
+							  if (d.getElementById(id)) return;
+							  js = d.createElement(s); js.id = id;
+							  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.0";
+							  fjs.parentNode.insertBefore(js, fjs);
+							}(document, 'script', 'facebook-jssdk'));
+							</script>
+
+
+<div class="container content_wrapper">
+        <!-- breadcumbs -->
+        <div class="col-xs-12 breadcrumb_container ">    <!-- wij moeten hieronder geen nieuwe row difiniëren aangezien -12 hele lengte in beslag neemt elke col die nu volgt komt er automatishc onder te staan-->
+            <ol class="breadcrumb">
+                <li><a href="{% url 'index' %}">Home</a></li>
+                {% if "koop" in pand.status|lower %}
+                    <li><a href="{% url 'te_koop' %}" rel="tag">{% trans "Panden" %}</a></li>
+                {% else %}
+                    <li><a href="{% url 'te_huur' %}" rel="tag">{% trans "Panden" %}</a></li>
+                {% endif %}
+                <li class="active">{{pand.type}} in {{pand.gemeente}} {{pand.stad}}</li>
+            </ol>
+            <div id="advanceSearch" class=" modal fade" role="dialog">
+    <div class="modal-dialog myModal">
+
+        <!-- Modal content-->
+        <div class="modal-content advance-search ">
+            <div class="modal-header search-heading">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h3 class="search-heading">
+                    <i class="fa fa-search"></i>
+                    {% trans "Geavanceerd zoeken" %}
+                </h3>
+            </div>
+
+            <div class="modal-body property-search-form">  <!-- as = advance search -->
+                <form class="clearfix advanced-form" action="{% url 'te_koop' %}" method="post">
+                    {% csrf_token %}
+                    <div class="row">
+                        <!-- Algemeen -->
+                        <div class="col-xs-12 col-sm-12 col-md-12 form-group">
+                            <h3>{% trans "Algemeen" %}</h3>
+                        </div>
+                        <!-- Locatie -->
+                        <div class="col-xs-12 col-sm-4 col-md-3 form-group">
+                            <input type="text" name="location" id="cities_adv" value="" placeholder="{% trans 'Locatie, Postcode' %}" class="form-control search-field">
+                        </div>
+                        <!-- Type -->
+                        <div class="col-xs-12 col-sm-4 col-md-3 form-group">
+                            <select class="selectpicker select-status"
+                                    multiple multiple title="Type" data-live-search="true" data-width="100%" name="housetype">
+                                {% for t in typehuis %}
+                                        <option>{{t}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <!-- Status -->
+                        <div class="col-xs-12 col-sm-4 col-md-3 form-group">
+                            <select class="selectpicker show-tick select-status " title="Status" name="statuspicker" data-width="100%">
+                                {% for s in status %}
+                                <option>{{s}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <!-- Staat -->
+                        <div class="col-xs-12 col-sm-4 col-md-3 form-group">
+                            <select class="selectpicker select-status"
+                                    multiple multiple title="{% trans 'Staat' %}" data-live-search="true" data-width="100%" name="property">
+                                {% for s in staat %}
+                                     <option>{{s}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <!-- criteria inputvelden -->
+                        <div class="col-xs-12 col-sm-4 col-md-3 form-group">
+                            <input type="number" name="amt-slaapkamers" id="min-bedrooms" value="" placeholder="{% trans 'Min. slaapkamers' %}" min="0" max="15" class="form-control">
+                        </div>
+                        <div class="col-xs-12 col-sm-4 col-md-3 form-group">
+                            <input type="number" name="amt-badkamers" id="min-bathrooms" value="" placeholder="{% trans 'Min. badkamers' %}" min="0" max="15" class="form-control">
+                        </div>
+                         <!-- Referentie nummer -->
+                        <div class="col-xs-12 col-sm-4 col-md-3 form-group">
+                            <input type="text" name="ref-number" id="ref-number" value="" placeholder="{% trans 'Referentie nummer' %}"
+                                   min="0" class="form-control">
+                        </div>
+                        <!-- Bouwjaar-->
+                        <div class="col-xs-12 col-sm-4 col-md-3 form-group">
+                            <input type="number" name="min-build" id="min-build" value="" placeholder="{% trans 'Min bouwjaar' %}" max="2016"
+                                   step="1" class="form-control">
+                        </div>
+                        <!-- Prijs-->
+                        <div class="col-xs-12 col-sm-4 form-group price-range">
+                            {% trans "Prijs" %}:
+                           <label>
+                               &euro; <span class="price-range-min auto" id="price-range-min"> </span> -
+                               &euro; <span class="price-range-max" id="price-range-max"> </span>
+                           </label>
+                            <div id="slider-price"></div>
+                        </div>
+                        <!-- Oppervlakte-->
+                         <div class="col-xs-12 col-sm-4 form-group price-range">
+                            {% trans "Grond oppervlakte:" %}
+                           <label>
+
+                               <span id="size-range-min"> </span>m<sup>2</sup> -
+                               <span id="size-range-max"> </span>m<sup>2</sup>
+                           </label>
+                            <div id="slider-size"></div>
+                        </div>
+                        <!-- Verzenden -->
+                        <div class="col-xs-12 col-sm-12 col-md-12 form-group send-form">
+                            <input type="submit" value="{% trans 'Zoeken' %}" class="btn btn-primary btn-block form-control">
+                        </div>
+                        <!-- meer/ minder criteria's -->
+                    </div>
+                        <a data-toggle="collapse" href="#collapse1">
+                            <span class="more">{% trans "Weergeef meer Criteria's" %}</span>
+                        </a>
+                    <div id="collapse1" class="panel-group panel-collapse collapse">
+                        <div class="panel panel-default property-search-more">
+                            <div class="panel-heading">
+                                <h6 class="panel-title">
+                                    {% trans "PANDEN CRITERIA'S:" %}
+
+                                </h6>
+                            </div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    {% for c in criteria %}
+                                        <div class="col-xs-12 col-sm-4 col-md-3 form-group">
+                                            <input name="{{c.naam}}" id="property-search-feature-{{c.pk}}"
+                                                   class="property-search-feature" type="checkbox" value="">
+                                            <label for="property-search-feature-{{c.pk}}">{{c}}</label>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <input hidden name="search-type" value="advanced"/>
+                    <input hidden id="price-min-id" value="" name="price-min"/>
+                    <input hidden id ="price-max-id" value="" name="price-max"/>
+                    <input hidden id="size-min-id" value="" name="size-min"/>
+                   <input hidden id ="size-max-id" value="" name="size-max"/>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+        </div>
+        <div class=" col-xs-12 content-details-container">
+            <div class="row">
+                <div class="col-xs-12 summarized">
+                    <h1 class="entry-title ">Villa in Hoboken Antwerpen</h1>
+                    <span class="price_area">
+                        <span class="price_label"></span> € {{pand.prijs|intcomma}}
+                    </span>
+                </div>
+
+
+                <div class="col-xs-12 single-content">
+                    <div class="row notice_area  ">
+                        <div class="col-xs-6 ">
+                            <div class="property_categs">
+                                {{pand.type}}
+                                {{pand.status}}
+                            </div>
+                            <span class="adres_area">
+                                {{pand.straat_naam}} {{pand.huis_nummer}}
+                                {{pand.postcode}}
+                                {{pand.gemeente}}
+                            </span>
+                        </div>
+
+                            <div class="prop_social">
+                                <div class="no_views">
+                                    <i class="fa fa-eye-slash "></i>{{pand.pand_hit_count}}
+                                </div>
+                                    <!-- Your share button code -->
+                                <div class="fb-share-button" src="http://193.191.187.253:8092/static/master/img/base/logo.png"
+                                    data-href="http://193.191.187.253:8092/nl/{{pand.referentienummer}}"
+                                    data-layout="icon">
+                                </div>
+                                    <a target="_blank" href="https://twitter.com/share" class="twitter-share-buttonr" data-url="http://193.191.187.253:8092" data-text="Via Sofie" data-size="large" data-hashtags="immoViaSofie">Tweet</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+                                <a class="" href="#" data-val="{{pand.referentienummer}}">
+                                <i class="glyphicon glyphicon-heart" data-toggle=""
+                                title="Toevoegen aan favoriet"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 ">
+                        <!-- Slider or not to slider -->
+                        <div class="row  testing">
+                            <div class="fotorama" data-width="100%"
+                                 data-fit="cover" data-ratio="800/500" data-loop="true" data-nav="thumbs"
+                                 data-transition="slide" data-autoplay="false" data-loop="true"
+                                 data-thumbheight="85"  data-thumbwidth="85" data-thumbmargin="15"
+                                 data-transitionduration="500" data-navposition="bottom">
+                                 {% if pand %}
+                                    {% for foto in pand.fotos%}
+                                         <img src="{{foto}}" alt="">
+                                    {% endfor%}
+                                {% endif %}
+                            </div>
+                        </div>
+                        <!-- uitgebreide panden informatie -->
+                        <div class="row text-center detail-single-listing">
+                            <div role="tabpanel" id="tab_prpg">
+                                <!-- NAV TABS  -->
+                                <ul class="nav nav-tabs" role="tablist">
+                                    <li role="presentation" class="active">
+                                        <a href="#description" aria-controls="description" role="tab" data-toggle="tab" aria-expanded="true">
+                                            {% trans "Beschrijving" %}
+                                        </a>
+                                    </li>
+
+                                    <li role="presentation" class="">
+                                        <a href="#address" aria-controls="address" role="tab" data-toggle="tab" aria-expanded="false">
+                                            {% trans "Adres" %}
+                                        </a>
+                                    </li>
+                                    <li role="presentation">
+                                        <a href="#details" aria-controls="details" role="tab" data-toggle="tab">
+                                            Details
+                                        </a>
+                                    </li>
+                                    <li role="presentation">
+                                        <a href="#features" aria-controls="features" role="tab" data-toggle="tab">
+                                            Eigenschappen
+                                        </a>
+                                    </li>
+                                </ul>
+                                <!-- TABS PANES  -->
+                                <div class="tab-content">
+                                    <!-- Beschrijving -->
+                                    <div role="tabpanel" class="tab-pane active" id="description">
+                                        <p>{{pand.beschrijving}}.</p>
+                                    </div>
+                                    <!-- Adres -->
+                                    <div role="tabpanel" class="tab-pane" id="address">
+                                        <div class="listing_detail col-sm-4"><strong>Adres:</strong>
+                                            {{pand.straat_naam}} {{pand.huis_nummer}}
+                                        </div>
+                                        <div class="listing_detail col-sm-4"><strong>Stad:</strong>
+                                            {{pand.stad}}
+                                        </div>
+                                        <div class="listing_detail col-sm-4"><strong>Postcode:</strong>
+                                            {{pand.postcode}}
+                                        </div>
+                                        <div class="listing_detail col-sm-4"><strong>Gemeente:</strong>
+                                           {{pand.gemeente}}
+                                        </div>
+                                        <div class="listing_detail col-sm-4"><strong>{% trans "Land" %}:</strong>
+                                            {{pand.land}}
+                                        </div>
+                                    </div>
+
+                                    <!-- Details -->
+                                    <div role="tabpanel" class="tab-pane text-left" id="details">
+                                        <div class="listing_detail col-sm-4" id="propertyid_display">
+                                            <strong>Pand ID:</strong> {{pand.pk}}
+                                        </div>
+                                        <div class="listing_detail col-sm-4">
+                                            <strong>Prijs:</strong>
+                                             € {{pand.prijs|intcomma}}
+                                        </div>
+                                        <div class="listing_detail col-sm-4">
+                                            {% for eigenschap in pand.eigenschappen %}
+                                                {% if 'grondopp' in eigenschap.eigenschap.naam|lower %}
+                                                     <strong>Grond opp:</strong>
+                                                    {{eigenschap.oppervlakte}}{{eigenschap.eenheid|lower}}
+                                                    <sup>2</sup>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </div>
+                                        <div class="listing_detail col-sm-4">
+                                            {% for eigenschap in pand.eigenschappen %}
+                                                {% if 'woon' in eigenschap.eigenschap.naam|lower %}
+                                                    <strong>Bewoonbare oppervlakte:</strong>
+                                                        {{eigenschap.oppervlakte}}{{eigenschap.eenheid|lower}}
+                                                    <sup>2</sup>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </div>
+                                        <div class="listing_detail col-sm-4">
+                                            <strong>{% trans "Verdieping(en)" %} :</strong> {{pand.verdieping}}
+                                        </div>
+                                        <div class="listing_detail col-sm-4">
+                                            <strong>Kamer(s):</strong> {{pand.aantal_kamers}}
+                                        </div>
+                                        <div class="listing_detail col-sm-4">
+                                            {% for criteria in pand.criteria%}
+                                                {% if 'slaapkamer' in criteria.criteria.naam|lower %}
+                                                    <strong>{% trans "Slaapkamer(s)" %}:</strong> {{criteria.aantal}}
+                                                {% endif %}
+                                            {% endfor %}
+                                        </div>
+                                        <div class="listing_detail col-sm-4">
+                                            {% for criteria in pand.criteria%}
+                                                {% if 'badkamer' in criteria.criteria.naam|lower %}
+                                                    <strong> {% trans "Badkamer(s)" %}:</strong> {{criteria.aantal}}
+                                                {% endif %}
+                                            {% endfor %}
+                                        </div>
+                                         <div class="listing_detail col-sm-4">
+                                            {% for criteria in pand.criteria%}
+                                                {% if 'toilet' in criteria.criteria.naam|lower %}
+                                                    <strong> {% trans "Toilett(en)" %}:</strong> {{criteria.aantal}}
+                                                {% endif %}
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+
+                                    <!-- Featured (eigenschappen ) -->
+                                    <!-- Misschien kunt je hier over loopen ene keer voor alle eigenschappen te tonen
+                                        en de andere keer om te controleren of het pand de gevraade eigenschap wel of niet heeft
+                                        en verdere uitbreiding zou mogelijk zijn dat wij een kap leggen op de mogelijke eigenschappen
+                                        met perioriteit aan de meest voorkomende eigenschappen| of door enkel eigschappen te tonen dat het pand heeft
+                                     -->
+
+                                    <div role="tabpanel" class="tab-pane text-left" id="features">
+                                        {% for criteria in pand.criteria%}
+                                            <div class="listing_detail col-sm-4"><i class="fa fa-check"></i>
+                                                {% if LANGUAGE_CODE == 'en' %}
+                                                    {{criteria.criteria.naam_en}}
+                                                {% elif LANGUAGE_CODE == 'fr' %}
+                                                    {{criteria.criteria.naam_fr}}
+                                                {% else %}
+                                                    {{criteria.criteria.naam}}
+                                                {% endif %}
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+
+                                    <!-- Nice to have -> stats -> verwijder dit als het niet gebruikt kan worden -->
+                                    <div role="tabpanel" class="tab-pane " id="stats">
+                                        <div class="panel-body">
+                                            <canvas id="myChartacc" width="763" height="100" > </canvas>
+                                                   <p>@Guru check http://www.chartjs.org/ <br>kan misschien nice to have zijn om aantal keren dat
+                                                    deze pand is bezocht weertegeven
+                                                </p>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <!-- Vloerplan -->
+                        {% if pand.plattegrond_gelijksvloer %}
+                            <div class="row">
+                            <div class="floor-plans">
+                                <h3 class="floor-plans-label">Plattegrond</h3>
+
+                                <div class="panel-group floor-plan">
+                                    <div data-toggle="collapse" data-target="#verdiep1"
+                                         class="panel panel-default floor-plan current">
+                                        <div class="panel-heading floor-plan-title clearfix">
+                                            <i class="fa fa-chevron-right"></i>
+
+                                            <h3 class="panel-title">
+                                                Gelijksvloer
+                                            </h3>
+
+                                          <!--  <div class="floor-plan-meta">
+                                                <div>1850 m<sup>2</sup></div>
+                                                <div> 2 badkamers</div>
+                                                <div>3 Slaapkamers</div>
+                                                <div class="floor-price"><span class="floor-price-value">$4,000</span>
+                                                    Per Maand
+                                                </div>
+                                            </div>-->
+                                        </div>
+                                        <div id="verdiep1" class="panel-collapse collapse">
+                                            <div class="panel-body floor-plan-content">
+                                                <div class="floor-plan-desc">
+                                                    <p>Dit is het gelijkvloer, implementeer nog een lightbox zodat je op
+                                                        de afbeelding kan
+                                                        Klikken en zo vergroten
+                                                    </p>
+                                                    <p>Curabitur blandit tempus porttitor. Sed posuere consectetur est
+                                                        at lobortis. Duis mollis, est non commodo luctus, nisi erat
+                                                        porttitor ligula, eget lacinia odio sem nec elit. Etiam porta
+                                                        sem malesuada magna mollis euismod. Nulla vitae elit libero, a
+                                                        pharetra augue. Vestibulum id ligula porta felis euismod
+                                                        semper.
+                                                    </p>
+                                                    <div class="ui horizontal divider">
+                                                        <i class="photo icon"></i> Afbeelding
+                                                    </div>
+                                                </div>
+                                                <div class="floor-plan-map">
+                                                    <a href="http://www.lionsgate.nl/imgs/plattegrond-2-groot.jpg"
+                                                       class="swipebox" rel="gallery_floor_plans">
+                                                        <img src="http://www.lionsgate.nl/imgs/plattegrond-2-groot.jpg">
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {% if pand.plattegrond_eerste_verdiep %}
+                                    <!--- Volgende verdiep -->
+                                        <div data-toggle="collapse" data-target="#verdiep2"
+                                         class="panel panel-default floor-plan current">
+                                        <div class="panel-heading floor-plan-title clearfix">
+                                            <i class="fa fa-chevron-right"></i>
+
+                                            <h3 class="panel-title">
+                                                Eerste Verdiep
+                                            </h3>
+
+                                            <div class="floor-plan-meta">
+                                                <div>2500 m<sup>2</sup></div>
+                                                <div>1 Badkamer</div>
+                                                <div>2 Slaapkamer</div>
+                                            </div>
+                                        </div>
+                                        <div id="verdiep2" class="panel-collapse collapse">
+                                            <div class="panel-body floor-plan-content">
+                                                <div class="floor-plan-desc">
+                                                    <p>Dit is het eerste verdiep, implementeer nog een lightbox zodat je op
+                                                        de afbeelding kan
+                                                        Klikken en zo vergroten
+                                                    </p>
+                                                    <p>Curabitur blandit tempus porttitor. Sed posuere consectetur est
+                                                        at lobortis. Duis mollis, est non commodo luctus, nisi erat
+                                                        porttitor ligula, eget lacinia odio sem nec elit. Etiam porta
+                                                        sem malesuada magna mollis euismod. Nulla vitae elit libero, a
+                                                        pharetra augue. Vestibulum id ligula porta felis euismod
+                                                        semper.
+                                                    </p>
+                                                    <div class="ui horizontal divider">
+                                                        <i class="photo icon"></i> Afbeelding
+                                                    </div>
+                                                </div>
+                                                <div class="floor-plan-map">
+                                                    <a href="http://www.vakantiehuis-op-ameland.nl/img/plattegronden/plattegrond-vakantiehuis-stormvloed-1.jpg"
+                                                       class="swipebox" rel="gallery_floor_plans">
+                                                        <img src="http://www.vakantiehuis-op-ameland.nl/img/plattegronden/plattegrond-vakantiehuis-stormvloed-1.jpg">
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endif %}
+
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                         <div class="gmap-container ">
+                                <div id="map"></div>
+                                <div class="col-xs-12 gmap-control-container">
+                                    <div class="col-xs-4">
+                                        <div class="gmap-zoom-container">
+                                            <div id="gmapzoomIn" class="gmapzoomwraper gmapzoomIn">
+                                                <i class="fa fa-plus"></i>
+                                            </div>
+                                            <div id="gmapzoomOut" class="gmapzoomwraper gmapzoomOut">
+                                                <i class="fa fa-minus"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xs-4">
+                                        <div id="street-view" class="">
+                                            <i class="fa fa-location-arrow"></i> Street View
+                                        </div>
+
+                                    </div>
+
+                                    <div class="col-xs-4">
+
+                                        <div class="dropdown gmap-dropdown">
+                                            <button id="view-weergave" class="btn gmap-dorpdown-buttons dropdown-toggle"
+                                                    type="button" data-toggle="dropdown">
+                                                <i class="fa  fa-picture-o"></i> Weergave
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                                <li id="roadMap">DEFAULT</li>
+                                                <li id="terrain">TERRAIN</li>
+                                                <li id="satellite">SATELLITE</li>
+                                                <li id="hybrid"> HYBRID</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        <!-- Contact form -->
+                        <div class="row  ">
+                            <div class="agent_contact_form">
+                                <a href="{% url 'contact' %}" target="_blank"><h3 id="show_contact">{% trans "Contacteer Via Sofie" %}</h3></a>
+                            </div>
+                        </div>
+                        {% if user.is_superuser %}
+                            <center>
+                                <img style="padding: 10px;" src="https://chart.googleapis.com/chart?chs=150x150&amp;cht=qr&amp;chl=http://193.191.187.253:8092{% url 'pand_detail' pand.pk %}&amp;choe=UTF-8" alt="QR code">
+                            </center>
+                        {% endif %}
+
+
+                    </div>
+                </div>
+                <!-- EINDE PAND DETAILS  -->
+            </div>
+        </div>
+        <!-- EINDE 9 col container -->
+
+        <div class="clearfix visible-xs"></div>
+
+    </div>
+
+</div>
+<input type="hidden" id="street" value="{{pand.straat_naam}} {{pand.huis_nummer}} {{pand.gemeente}}">
+{%endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- FOOTER -->
+{%block page_scripts %}
+
+<script src="http://cdnjs.cloudflare.com/ajax/libs/fotorama/4.6.4/fotorama.js"></script> <!-- 16 KB -->
+
+<script>
+    /*  BACK TO TOP  */
+    $(document).ready(function(){
+        /*-----------------------------------------------------------------*/
+        /*  Floor Plans
+        /*-----------------------------------------------------------------*/
+
+        $('.floor-plan-title').on( 'click', function(){
+            var parent_accordion = $(this).closest('.floor-plan');
+            if ( parent_accordion.hasClass('current') ) {                $(this).find('i.fa').removeClass( 'fa-chevron-right').addClass( ' fa-chevron-down' );
+                parent_accordion.removeClass('current')
+            } else {
+                $(this).find('i.fa').removeClass('fa-chevron-down ').addClass( 'fa-chevron-right' );
+                parent_accordion.addClass('current')
+            }
+        });
+
+
+    });
+
+</script>
+<script type="text/javascript" >
+    /* GOOGLE MAP CONTROLS EVENTS */
+
+    // Zoom functie
+    $('#gmapzoomIn').click(function(){
+         ZoomIn();
+    });
+
+    $('#gmapzoomOut').click(function(){
+         ZoomOut();
+    });
+
+    // street view
+    $('#street-view').click(function(){
+         toggleStreetView();
+    });
+
+    // map types
+     $('#roadMap').click(function(){
+         $('#view-weergave').html('<i class="fa  fa-picture-o"></i> Weergave');
+         map.setMapTypeId(google.maps.MapTypeId.ROADMAP);
+    });
+    $('#terrain').click(function(){
+        $('#view-weergave').html('<i class="fa  fa-picture-o"></i> TERRAIN');
+        map.setMapTypeId(google.maps.MapTypeId.TERRAIN);
+    });
+    $('#satellite').click(function(){
+        $('#view-weergave').html('<i class="fa  fa-picture-o"></i> SATELLITE');
+        map.setMapTypeId(google.maps.MapTypeId.SATELLITE);
+    });
+    $('#hybrid').click(function(){
+        $('#view-weergave').html('<i class="fa  fa-picture-o"></i> HYBRID');
+        map.setMapTypeId(google.maps.MapTypeId.HYBRID);
+    });
+
+</script>
+
+<script>
+
+     function searchAddress() {
+        var addressInput = $('#street').val();
+        var geocoder = new google.maps.Geocoder();
+        geocoder.geocode({address: addressInput}, function(results, status) {
+            if (status == google.maps.GeocoderStatus.OK) {
+                var myResult = results[0].geometry.location; // reference LatLng value
+                createMarker(myResult); // call the function that adds the marker
+                map.setCenter(myResult);
+                map.setZoom(17);
+            }
+        });
+    }
+
+    function createMarker(latlng) {
+       // If the user makes another search you must clear the marker variable
+        if(marker != undefined && marker != ''){
+            marker.setMap(null);
+            marker = '';
+        }
+        marker = new google.maps.Marker({
+          map: map,
+          position: latlng
+        });
+    }
+
+    var panorama;
+    var map ;
+
+    function initMap() {
+
+        var astorPlace = {lat: 51.220434, lng: 4.400260};
+        var addressInput = $('#street').val();
+        var geocoder = new google.maps.Geocoder();
+        geocoder.geocode({address: addressInput}, function(results, status) {
+            // Set up the map
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: results[0].geometry.location,
+                zoom: 16,
+                disableDefaultUI: true,
+                scrollwheel: true,
+               styles: [{"elementType":"geometry","stylers":[{"hue":"#ff4400"},{"saturation":-68},{"lightness":-4},{"gamma":0.72}]},
+                {"featureType":"road","elementType":"labels.icon"},
+                {"featureType":"landscape.man_made","elementType":"geometry","stylers":[{"hue":"#0077ff"},{"gamma":3.1}]},
+                {"featureType":"water","stylers":[{"hue":"#00ccff"},{"gamma":0.44},{"saturation":-33}]},
+                {"featureType":"poi.park","stylers":[{"hue":"#44ff00"},{"saturation":-23}]},
+                {"featureType":"water","elementType":"labels.text.fill","stylers":[{"hue":"#007fff"},{"gamma":0.77},{"saturation":65},{"lightness":99}]},
+                {"featureType":"water","elementType":"labels.text.stroke","stylers":[{"gamma":0.11},{"weight":5.6},{"saturation":99},{"hue":"#0091ff"},{"lightness":-86}]},
+                {"featureType":"transit.line","elementType":"geometry","stylers":[{"lightness":-48},{"hue":"#ff5e00"},{"gamma":1.2},{"saturation":-23}]},
+                {"featureType":"transit","elementType":"labels.text.stroke","stylers":[{"saturation":-64},{"hue":"#ff9100"},{"lightness":16},{"gamma":0.47},{"weight":2.7}]
+                }]
+            });
+            // Set up the markers on the map
+            var cafeMarker = new google.maps.Marker({
+                position: results[0].geometry.location,
+                map: map,
+                title: 'Cafe'
+            });
+            // We get the map's default panorama and set up some defaults.
+            // Note that we don't yet set it visible.
+            panorama = map.getStreetView();
+            panorama.setPosition(results[0].geometry.location);
+            panorama.setPov(/** @type {google.maps.StreetViewPov} */({
+                heading: 265,
+                pitch: 0
+            }));
+        });
+    }
+
+
+    function ZoomIn() {
+        var current= parseInt( map.getZoom(),10);
+        current++;
+        if(current>20){
+            current=20;
+        }
+        map.setZoom(current);
+    }
+
+    function ZoomOut() {
+        var current= parseInt( map.getZoom(),10);
+        current--;
+        if(current<0){
+            current=0;
+        }
+        map.setZoom(current);
+    }
+
+
+    function toggleStreetView() {
+        var toggle = panorama.getVisible();
+        if (toggle == false) {
+            panorama.setVisible(true);
+        } else {
+            panorama.setVisible(false);
+        }
+    }
+</script>
+<script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBtuDSI7A3e5Zf0C5xiNzPcrdVUxz8f3Cc&callback=initMap">
+</script>
+<script src="{% static 'master/js/details.js' %}"></script>
+<script src="{% static 'master/js/cookie/jquery.cookie.min.js' %}"></script>
+<script>
+
+        $('.favorite_pand_detail_link').on('click', function(e) {
+			//console.log("clicked " + $('input[name=password]').val());
+			e.preventDefault();
+            var url = $(this).attr('href');
+            var pk = $(this).parent().attr('data');
+			var token = $('input[name=csrfmiddlewaretoken]').val();
+			console.log(pk);
+			$('.favorite_pand_detail_link').each(function(key, val) {
+				if ($(this).attr('href') == url) {
+					if ($.cookie(url) == undefined) {
+						$.cookie(url, pk.substr(0, 1));
+						$(this).addClass('isFavorite');
+					} else {
+						$.removeCookie(url);
+						$(this).removeClass('isFavorite');
+					}
+				}
+			});
+			/*$.ajax({
+				url: url,
+				type:'POST',
+				//data:formData,
+				data: {csrfmiddlewaretoken: token, pk: pk},
+				success:function(data) {
+                    $('.favorite_pand_link').each(function(key, val) {
+                        if ($(this).attr('href') == url) {
+                            if (data['add_to_favorite'] == true) {
+                                $(this).addClass('isFavorite');
+                            } else {
+                                $(this).removeClass('isFavorite');
+                            }
+                        }
+                    });
+				},
+				error: function (data) {
+					console.log("error");
+				}
+			});*/
+		});
+
+</script>
+
+{%endblock %}

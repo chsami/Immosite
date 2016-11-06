@@ -1,0 +1,41 @@
+{%extends "master/base.html" %}
+{% load staticfiles %}
+
+<!--  HEADER SECTIE -->
+{%block page_style %}
+<link href="{% static 'master/css/content/profile.css' %}" rel="stylesheet">
+{%endblock %}
+
+{%block title%}
+    Verstuur nieuwsbrief
+{% endblock %}
+
+
+{% block content %}
+        <form id="send-newsletter-form" class="form-horizontal" action="#" method="post" enctype="multipart/form-data" style="width:50%; margin-left:25%; margin-top:2.5%;">
+            {% csrf_token %}
+            {% if message %}
+                <p style="text-align:center;font-size:1.4em;">{{message}}</p>
+            {% endif %}
+            <label>
+                 Onderwerp:
+            </label>
+            <input class="w3-input" name="newsletter-subject" type="text"/>
+            <label>
+                 Bericht:
+            </label>
+            <textarea class="w3-input" name="newsletter-message"></textarea>
+            <label>
+                 selecteer je nieuwsbrief:
+            </label>
+            <input name="my-upload-file" type="file" accept="application/pdf" />
+            <button class="w3-btn-block w3-btn w3-wide w3-border w3-round-large" type="submit" style="background-color:#0d3532;margin-top:2.5%;">Verstuur</button>
+        </form>
+{% endblock %}
+
+
+<!-- FOOTER -->
+{%block page_scripts %}
+
+{%endblock %}
+

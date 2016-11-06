@@ -1,0 +1,11 @@
+{% for field in form %}
+    <div class="col-md-6">
+        {% if field.label_tag == 'Emailadres' %}
+            <label class=""> {{field.label_tag}}</label>
+        {% else %}
+            <label class=""> {{field.label_tag}}</label>
+        {% endif %}
+        <p></p>
+        {{ field }}
+    </div>
+{% endfor %}

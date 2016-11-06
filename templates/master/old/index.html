@@ -1,0 +1,95 @@
+{%extends "master/base.html" %}
+{% load staticfiles %}
+
+<!--  HEADER -->
+{%block page_style %}
+{%endblock %}
+
+
+
+{% block banner_content %}
+<div class="row banner">
+            <img alt="Banner" class="img-responsive" src="{% static 'master/img/banner/banner1.jpg' %}" height="1084">
+            <div class=" col-sm-12 search-box">
+                <div class=" container search-content">
+                    <form role="form" class="form-horizontal">
+
+                        <div class="form-group">
+                            <div class="col-sm-8">
+                                <label class="btn sofie-button-black"> Te koop</label>
+                                <label class="btn sofie-button-black"> Te huur</label>
+                            </div>
+                        </div >
+
+                        <div class="form-group">
+                            <div class="col-sm-4 gen-field location-field">
+                                <input type="email" class="form-control search-field" placeholder="Plaats, gemeente, postcode">
+                            </div>
+
+                             <div class="col-sm-2 gen-field">
+                                <div class="input-group">
+                                    <input type="text" ID="min-datebox" Class="form-control search-field" placeholder="Min prijs" >
+                                    <div class="input-group-btn ">
+                                        <button type="button" class="btn search-field dropdown-toggle" data-toggle="dropdown">
+                                            <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu" id="min-prijs">
+                                            <li>500</li>
+                                            <li>1000</li>
+                                            <li>1500</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-2 gen-field">
+                                <div class="input-group">
+                                    <input type="text" ID="max-datebox" Class="form-control search-field" placeholder="Max prijs" >
+                                    <div class="input-group-btn ">
+                                        <button type="button" class="btn search-field dropdown-toggle" data-toggle="dropdown">
+                                            <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu" id="max-prijs">
+                                            <li>1000</li>
+                                            <li>1500</li>
+                                            <li>2000</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-2 gen-field">
+                                <select class="selectpicker " multiple title="Type pand" data-width="100%" >
+                                    <option>Woning</option>
+                                    <option>Appartement</option>
+                                    <option>Duplex</option>
+                                    <option>Studio</option>
+                                    <option>Kot</option>
+                                </select>
+                            </div>
+
+                            <div class="col-sm-2 gen-field submit-field">
+                                 <button type="submit" class="btn sofie-button-black btn-block search-field">Zoeken</button>
+                            </div>
+
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-6 col-sm-offset-3 ">
+                                <button type="button" class="btn sofie-button-black btn-block">Uitgebreid zoeken</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+{% endblock %}
+
+{% block content %}
+
+{% endblock %}
+
+<!-- FOOTER -->
+{%block page_scripts %}
+<script src="{% static 'master/js/login.js' %}"></script>
+{%endblock %}
+

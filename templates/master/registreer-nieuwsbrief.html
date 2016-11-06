@@ -1,0 +1,20 @@
+{% extends "master/base.html" %}
+{% load staticfiles %}
+{% block title %}Nieuwsbrief - ViaSofie{% endblock %}
+{% block content %}
+{% if success %}
+    <h1 style="text-align:center">{{success}}</h1>
+{% else %}
+<form class="NieuwsbriefForm" action="" method="post">
+<img src="{% static 'master/img/nieuwsbrief/ebookicon.png' %}" width="10%" style="float:right; margin-bottom:5%;"/>
+    <div class="Nieuwsbrief" style="box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19); width:80%; margin-left:5%; margin-top:5%;">
+        {% csrf_token %}
+        <div class="form-white-background">
+            {% include 'master/forms/contact-template.html' %}
+        </div>
+    </div>
+</form>
+<div style="height:50%;"><p></p></div>
+{% endif %}
+
+{% endblock %}

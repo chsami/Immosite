@@ -1,0 +1,57 @@
+{%extends "master/base.html" %}
+{% load staticfiles %}
+<!--  HEADER SECTIE -->
+{%block page_style %}
+    <link href="{% static 'master/css/content/registratie.css' %}" rel="stylesheet">
+{%endblock %}
+
+{%block title%}
+    Registratie
+{% endblock %}
+
+
+
+<!--  	CONTENT  -->
+
+{% block content %}
+
+<div class="row">
+	<div class="col-md-12">
+				<div class="col-sm-offset-2 col-sm-10">
+					{% if error %}
+						 <p>{{error}}</p>
+					{% endif %}
+        		</div>
+				<form class="form-register" action="" method="post" enctype="multipart/form-data">
+					<div class="form-register-with-email">
+						{% csrf_token %}
+
+						<div class="form-white-background">
+							<div class="form-title-row">
+								<h1>Create an account</h1>
+							</div>
+
+							{% include 'master/forms/form-template.html' %}
+
+
+                   			<div class="form-row">
+                        		<button type="submit">Register</button>
+                    		</div>
+						</div>
+					</div>
+				</form>
+	</div>
+</div>
+{% endblock %}
+
+
+
+
+<!--- FOOTER  -->
+{%block page_scripts %}	
+{%endblock %}
+
+
+
+
+

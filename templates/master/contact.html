@@ -1,0 +1,64 @@
+{% extends "master/base.html" %}
+{% load staticfiles %}
+
+{% block title %}Contact{% endblock %}
+
+{% block content %}
+
+<form class="ContactForm" action="" method="post">
+    <div class="Contact" style="box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19); width:40%; margin-left:5%; margin-top:5%;">
+        {% csrf_token %}
+         <h1 style="text-align:center; padding: 0 10px;">Stuur ons een bericht</h1>
+        <div class="form-white-background">
+            {% include 'master/forms/contact-template.html' %}
+        </div>
+    </div>
+</form>
+<div style="
+    background-color:whitesmoke;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+    width:40%;
+    float: right;
+    margin-top: -45%;
+    margin-right: 5%;"><img style="margin-left: 2.5%;margin-top: 2.5%;margin-bottom: 2.5%;display:inline-block;"src="{% static 'master/img/contact/contact_us.jpg' %}" width="40%"/>
+    <p style="text-align:center;display:inline-block;padding: 20px;">Straatnaam</p>
+    <p style="text-align:center;display:inline-block;padding: 20px;";>Gemeente</p>
+    <p style="text-align:center;display:inline-block;padding: 20px;;">email</p>
+</div>
+
+{% endblock %}
+
+
+
+<!--- FOOTER  -->
+{%block page_scripts %}
+<script>
+    /*$( document ).ready(function() {
+        $('.ContactForm').submit(function (e) {
+            e.preventDefault();
+            alert("hello world");
+            var formData = $(this).serialize();
+            $.ajax({
+                url: "#",
+                type: 'POST',
+                data: formData,
+                success: function (data) {
+                    var json = $.parseJSON(data);
+                    $.each(json, function(k, v){
+                        console.log(k + " = " + v);
+                    });
+                },
+                error: function (data) {
+                    console.log("error");
+                }
+            });
+        });
+    });*/
+</script>
+<script src='https://www.google.com/recaptcha/api.js'></script>
+{%endblock %}
+
+
+
+
+

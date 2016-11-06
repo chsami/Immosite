@@ -1,0 +1,27 @@
+{% extends "master/base.html" %}
+{% load staticfiles %}
+{% load i18n %}
+{% block title %}Sitemap{% endblock %}
+
+{% block content %}
+<div style="margin-left:10%; margin-top: 5%; font-size:1.4em;">
+    <h1 style="margin-bottom:2.5%">Sitemap</h1>
+    <ul>
+        <li><a href="{% url 'index' %}">{% trans "Home" %}</a></li>
+        <li><a href="{% url 'about' %}">{% trans "Over ons" %}</a></li>
+        <li><a href="{% url 'contact' %}">{% trans "Contact" %}</a></li>
+        <li><a href="{% url 'register-nieuwsbrief' %}">{% trans "Nieuwsbrief" %}</a></li>
+        <li><a href="{% url 'advice' %}">{% trans "Advies" %}</a></li>
+        <li><a href="{% url 'disclaimer' %}">{% trans "Disclaimer" %}</a></li>
+        <li><a href="{% url 'privacybeleid' %}">{% trans "Privacybeleid" %}</a></li>
+        <li><a href="{% url 'te_koop' %}">{% trans "Panden te koop" %}</a></li>
+        <li><a href="{% url 'te_huur' %}">{% trans "Panden te huur" %}</a></li>
+    </ul>
+</div>
+{% endblock %}
+
+
+
+<!--- FOOTER  -->
+{%block page_scripts %}
+{%endblock %}
